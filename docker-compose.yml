@@ -1,0 +1,23 @@
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack:4.5.0
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=1
+      - PERSISTENCE_SINGLE_FILE=false
+      - SERVICES=secretsmanager,ssm,events
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ENDPOINT=https://localhost.localstack.cloud:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - APP_NAME=hello-app
+      - DATA_DIR=${LOCALSTACK_DATA_DIR:-/var/lib/localstack/tmp}
+      - SECRETS_FILENAME=secrets.env
+      - PARAMS_FILENAME=params.env
+    volumes:
+      - "./etc/localstack:/etc/localstack/init/ready.d"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "./env:/var/lib/localstack/tmp"
