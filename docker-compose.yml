@@ -6,14 +6,14 @@ services:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559"  # external services port range
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - PERSISTENCE_SINGLE_FILE=false
       - SERVICES=secretsmanager,ssm,events
-      - AWS_DEFAULT_REGION=us-east-1
-      - AWS_ENDPOINT=https://localhost.localstack.cloud:4566
+      - AWS_DEFAULT_REGION=${SPRING_CLOUD_AWS_REGION_STATIC}
+      - AWS_ENDPOINT=${SPRING_CLOUD_AWS_ENDPOINT}
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
-      - APP_NAME=hello-app
+      - APP_NAME=${SPRING_APPLICATION_NAME}
       - DATA_DIR=${LOCALSTACK_DATA_DIR:-/var/lib/localstack/tmp}
       - SECRETS_FILENAME=secrets.env
       - PARAMS_FILENAME=params.env

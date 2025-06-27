@@ -10,6 +10,12 @@ brew install awscli
 ```
 
 ## Configuration properties
+- rename 'default.env' to `.env`
+```properties
+SPRING_APPLICATION_NAME=hello-app
+SPRING_CLOUD_AWS_ENDPOINT=https://localhost.localstack.cloud:4566
+SPRING_CLOUD_AWS_REGION_STATIC=us-east-1
+```
 - create env files with configuration properties using `UPPER_SNAKE_CASE` naming conventions
     - `./env/secrets.env`
 ```properties
