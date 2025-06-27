@@ -8,7 +8,7 @@ SECRETS_FILENAME = os.getenv("SECRETS_FILENAME")
 PARAMS_FILENAME = os.getenv("PARAMS_FILENAME")
 SECRETS_FILE = f"{DATA_DIR}/{SECRETS_FILENAME}"
 PARAMS_FILE = f"{DATA_DIR}/{PARAMS_FILENAME}"
-SECRET_NAME = f"{APP_NAME}-secrets"
+SECRET_NAME = f"/secret/{APP_NAME}"
 
 AWS_DEFAULT_REGION = os.environ['AWS_DEFAULT_REGION']
 AWS_ENDPOINT = os.environ['AWS_ENDPOINT']
@@ -32,6 +32,10 @@ ssm_client = boto3.client(
 )
 
 
+def to_dot_case(key: str) -> str:
+    return key.strip().lower().replace('_', '.')
+
+
 def load_env_file(filepath):
     result = {}
     if not os.path.exists(filepath):
@@ -44,7 +48,7 @@ def load_env_file(filepath):
             if not line or line.startswith("#") or "=" not in line:
                 continue
             key, value = line.split("=", 1)
-            result[key.strip()] = value.strip()
+            result[to_dot_case(key)] = value.strip()
     return result
 
 

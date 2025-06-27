@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: hello-app
+  config:
+    import: aws-secretsmanager:/secret/${spring.application.name}
+  cloud:
+    aws:
+      endpoint: https://localhost.localstack.cloud:4566
+      region:
+        static: us-east-1
+logging.level:
+    io.awspring.cloud.secretsmanager: DEBUG

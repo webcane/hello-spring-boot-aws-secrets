@@ -1,17 +1,23 @@
 # hello-spring-boot-aws-secrets
 A Spring Boot example application demonstrating how to populate Spring configuration from AWS Secrets Manager and Parameter Store.
 
-# setup
-- install awscli if not installed
+# Setup
+
+## Prerequisites
+- install docker, awscli and jq if not installed
 ```bash
 brew install awscli
 ```
-- create env files with necessary properties
+
+## Configuration properties
+- create env files with configuration properties using `UPPER_SNAKE_CASE` naming conventions
     - `./env/secrets.env`
     - `./env/params.env`
  
   use comments if necessary on a new line only 
-- run the application
+
+## Running
+- start LocalStack and the application with Docker Compose 
 ```bash
 docker compose up
 ```
