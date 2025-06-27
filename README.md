@@ -12,7 +12,16 @@ brew install awscli
 ## Configuration properties
 - create env files with configuration properties using `UPPER_SNAKE_CASE` naming conventions
     - `./env/secrets.env`
-    - `./env/params.env`
+```properties
+APP_USERNAME=sa
+APP_PASSWORD=pwd
+```
+  - `./env/params.env`
+```properties
+MANAGEMENT_ENDPOINTS_WEB_BASE-PATH=/management
+MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=env
+LOGGING_LEVEL_CANE_BROTHERS=DEBUG
+```
  
   use comments if necessary on a new line only 
 
