@@ -19,7 +19,7 @@ brew install awscli
 ```
 
 ## Configuration properties
-- rename 'default.env' to `.env`
+- rename `default.env` to `.env`
 ```properties
 SPRING_CONFIG_IMPORT=aws-secretsmanager:/secret/hello-app,aws-parameterstore:/config/hello-app/
 SPRING_APPLICATION_NAME=hello-app
