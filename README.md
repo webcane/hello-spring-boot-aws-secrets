@@ -1,6 +1,8 @@
 # hello-spring-boot-aws-secrets
 A Spring Boot example application demonstrating how to populate Spring configuration from AWS Secrets Manager and Parameter Store.
 
+![Gradle Build](https://github.com/webcane/hello-spring-boot-aws-secrets/workflows/Gradle%20Build/badge.svg)
+
 # Setup
 
 ## Prerequisites
