@@ -4,20 +4,53 @@ services:
     image: localstack/localstack:4.5.0
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    env_file:
+      - .env
     environment:
       - DEBUG=0
-      - PERSISTENCE_SINGLE_FILE=false
+      - PERSISTENCE=0
       - SERVICES=secretsmanager,ssm,events
-      - AWS_DEFAULT_REGION=${SPRING_CLOUD_AWS_REGION_STATIC}
-      - AWS_ENDPOINT=${SPRING_CLOUD_AWS_ENDPOINT}
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - APP_NAME=${SPRING_APPLICATION_NAME}
-      - DATA_DIR=${LOCALSTACK_DATA_DIR:-/var/lib/localstack/tmp}
       - SECRETS_FILENAME=secrets.env
       - PARAMS_FILENAME=params.env
     volumes:
-      - "./etc/localstack:/etc/localstack/init/ready.d"
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "./env:/var/lib/localstack/tmp"
+      - localstack-volume:/var/lib/localstack
+      - ./etc/localstack:/etc/localstack/init/ready.d
+      - ./env:/var/lib/localstack/state
+    networks:
+      - localstack-network
+
+  builder:
+    image: gradle:8.14.2-jdk21-ubi-minimal
+    container_name: ${SPRING_APPLICATION_NAME}-gradle-builder
+    working_dir: /app
+    volumes:
+      - .:/app
+      - gradle-cache:/root/.gradle
+    command: gradle bootJar
+    networks:
+      - localstack-network
+
+  app:
+    image: eclipse-temurin:21-jdk-jammy
+    container_name: ${SPRING_APPLICATION_NAME}-spring
+    depends_on:
+      builder:
+        condition: service_completed_successfully
+    working_dir: /app
+    env_file:
+      - .env
+    volumes:
+      - ./build/libs:/app
+    ports:
+      - "$SERVER_PORT:$SERVER_PORT"
+    command: java -jar ${SPRING_APPLICATION_NAME}.jar
+    networks:
+      - localstack-network
+
+volumes:
+  gradle-cache:
+  localstack-volume:
+
+networks:
+  localstack-network:
+#    driver: bridge
