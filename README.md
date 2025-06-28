@@ -14,47 +14,49 @@ A Spring Boot example application demonstrating how to populate Spring configura
 
 ## Prerequisites
 - install docker, awscli and jq if not installed
-```bash
-brew install awscli
-```
+  ```bash
+  brew install awscli
+  ```
 
 ## Configuration properties
 - rename `default.env` to `.env`
-```properties
-SPRING_CONFIG_IMPORT=aws-secretsmanager:/secret/hello-app,aws-parameterstore:/config/hello-app/
-SPRING_APPLICATION_NAME=hello-app
-SPRING_CLOUD_AWS_ENDPOINT=http://localstack:4566
-SPRING_CLOUD_AWS_REGION_STATIC=us-east-1
-AWS_ACCESS_KEY_ID=test
-AWS_SECRET_ACCESS_KEY=test
-```
+  ```properties
+  SPRING_CONFIG_IMPORT=aws-secretsmanager:/secret/hello-app,aws-parameterstore:/config/hello-app/
+  SPRING_APPLICATION_NAME=hello-app
+  SPRING_CLOUD_AWS_ENDPOINT=http://localstack:4566
+  SPRING_CLOUD_AWS_REGION_STATIC=us-east-1
+  AWS_ACCESS_KEY_ID=test
+  AWS_SECRET_ACCESS_KEY=test
+  ```
+It defines only the properties required to access AWS and import configuration from there.
+
 - create env files with configuration properties using `UPPER_SNAKE_CASE` naming conventions
-    - `./env/secrets.env`
-```properties
-APP_USERNAME=sa
-APP_PASSWORD=pwd
-```
-  - `./env/params.env`
-```properties
-MANAGEMENT_ENDPOINTS_WEB_BASE-PATH=/management
-MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=env
-LOGGING_LEVEL_CANE_BROTHERS=DEBUG
-```
+  - Example of `./env/secrets.env`
+  ```properties
+  APP_USERNAME=sa
+  APP_PASSWORD=pwd
+  ```
+  - Example of `./env/params.env`
+  ```properties
+  MANAGEMENT_ENDPOINTS_WEB_BASE-PATH=/management
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=env
+  LOGGING_LEVEL_CANE_BROTHERS=DEBUG
+  ```
  
   use comments if necessary on a new line only 
 
 ## Running
 - start LocalStack and the application with Docker Compose 
-```bash
-docker compose up
-```
+  ```bash
+  docker compose up
+  ```
 - verify if secrets were successfully created in LocalStack
-```bash
-alias awsls='aws --endpoint-url https://localhost.localstack.cloud:4566 --region us-east-1'
-awsls secretsmanager list-secrets | jq
-```
+  ```bash
+  alias awsls='aws --endpoint-url https://localhost.localstack.cloud:4566 --region us-east-1'
+  awsls secretsmanager list-secrets | jq
+  ```
 - verify parameters
-```bash
-awsls ssm describe-parameters | jq
-awsls ssm get-parameters-by-path --path /config/hello-app/ | jq
-```
+  ```bash
+  awsls ssm describe-parameters | jq
+  awsls ssm get-parameters-by-path --path /config/hello-app/ | jq
+  ```
