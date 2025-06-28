@@ -3,6 +3,13 @@ A Spring Boot example application demonstrating how to populate Spring configura
 
 ![Gradle Build](https://github.com/webcane/hello-spring-boot-aws-secrets/workflows/Gradle%20Build/badge.svg)
 
+# Key Features
+- Separates application properties into secrets and parameters
+- Uses AWS Secrets Manager and AWS Parameter Store
+- Supports .env file for both LocalStack and the application
+- Avoids using `application.properties` or `application.yml` entirely
+- Useful for CI/CD – no need to provide a large number of environment variables
+
 # Setup
 
 ## Prerequisites
@@ -14,9 +21,12 @@ brew install awscli
 ## Configuration properties
 - rename 'default.env' to `.env`
 ```properties
+SPRING_CONFIG_IMPORT=aws-secretsmanager:/secret/hello-app,aws-parameterstore:/config/hello-app/
 SPRING_APPLICATION_NAME=hello-app
-SPRING_CLOUD_AWS_ENDPOINT=https://localhost.localstack.cloud:4566
+SPRING_CLOUD_AWS_ENDPOINT=http://localstack:4566
 SPRING_CLOUD_AWS_REGION_STATIC=us-east-1
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
 ```
 - create env files with configuration properties using `UPPER_SNAKE_CASE` naming conventions
     - `./env/secrets.env`
